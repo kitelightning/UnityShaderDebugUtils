@@ -52,7 +52,7 @@ namespace D3DCompileInjector
                     System.Diagnostics.Process.GetCurrentProcess().Kill();
                 }
 
-                Process[] procs = Process.GetProcessesByName("Unity");
+                Process[] procs = Process.GetProcessesByName("TestD3DCompileApp");
 
                 unityPid = procs[0].Id;
 

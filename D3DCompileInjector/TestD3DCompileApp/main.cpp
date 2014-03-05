@@ -52,7 +52,7 @@ using namespace std;
 
 int main()
 {
-    cout << "Attach injector then press a key...." << endl;
+    cout << "Attach injector then press enter...." << endl;
     cin.get();
 
 
