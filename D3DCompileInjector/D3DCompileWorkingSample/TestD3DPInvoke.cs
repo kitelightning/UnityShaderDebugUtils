@@ -8,6 +8,7 @@ using Device = SlimDX.Direct3D11.Device;
 using Resource = SlimDX.Direct3D11.Resource;
 using System;
 using System.Runtime.InteropServices;
+using D3DCompileInjector;
 
 namespace SimpleTriangle
 {
@@ -17,6 +18,11 @@ namespace SimpleTriangle
         {
             TestShaderCompilationPInvoke();
 
+            TestManagedDXDevice();
+        }
+
+        private static void TestManagedDXDevice()
+        {
             Device device;
             SwapChain swapChain;
             ShaderSignature inputSignature;
@@ -135,27 +141,40 @@ namespace SimpleTriangle
 
             IntPtr globalShader = Marshal.StringToHGlobalAnsi(shader);
             int lastError = Marshal.GetLastWin32Error();
-            int hr = D3DCompileInjector.Main.D3DCompile(globalShader, (uint)shader.Length, null, null, IntPtr.Zero, "vs_main", "vs_5_0", 0, 0, out pCode, out pMsg);
+            HRESULT hr = D3DCompileInjector.Main.D3DCompile(globalShader, (uint)shader.Length, null, null, IntPtr.Zero, "vs_main", "vs_5_0", 0, 0, out pCode, out pMsg);
             lastError = Marshal.GetLastWin32Error();
+
+            if (hr.Failed)
+            {
+                string error = string.Format("{0} : {1}", hr.ToString(), D3DCompileInjector.Main.ID3DBlobToString(pMsg));
+                throw new Exception(error);
+            }
+
             IntPtr codePtr = pCode.GetBufferPointer();
             ulong codeSize = pCode.GetBufferSize();
 
-            if (lastError != 0 || hr < 0)
-            {
-                throw new ApplicationException("PInvoke to D3DCompile failed");
-            }
-
             Console.WriteLine("Code size " + codeSize);
 
-            hr = D3DCompileInjector.Main.D3DCompileFromFile("triangle.fx", null, IntPtr.Zero, "vs_main", "vs_5_0", 0, 0, out pCode, out pMsg);
+            hr = D3DCompileInjector.Main.D3DCompileFromFile(
+                @".\triangle.fx", 
+                null,
+                IntPtr.Zero,
+                "VShader", 
+                "vs_5_0", 
+                0, 
+                0, 
+                out pCode, 
+                out pMsg);
             lastError = Marshal.GetLastWin32Error();
+            if (hr.Failed)
+            {
+                string error = string.Format("{0} : {1}", hr.ToString(), D3DCompileInjector.Main.ID3DBlobToString(pMsg));
+                throw new Exception(error);
+            }
+
             codePtr = pCode.GetBufferPointer();
             codeSize = pCode.GetBufferSize();
-
-            if (lastError != 0 || hr < 0)
-            {
-                throw new ApplicationException("PInvoke to D3DCompile failed");
-            }
+            
             
             Console.WriteLine("Code size " + codeSize);
         }

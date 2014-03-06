@@ -26,8 +26,8 @@ namespace D3DCompileInjector
             public string Definition;
         }
 
-        [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true, CharSet = CharSet.Unicode)]
-        delegate int DD3DCompileFromFile([MarshalAs(UnmanagedType.LPWStr), In] String pFileName,
+        [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true, CharSet = CharSet.Ansi)]
+        delegate HRESULT DD3DCompileFromFile([MarshalAs(UnmanagedType.LPWStr), In] String pFileName,
                                          [In, Optional] D3D_SHADER_MACRO[] pDefines,
                                          [In, Optional] IntPtr pInclude,
                                          [MarshalAs(UnmanagedType.LPStr), In] String pEntrypoint,
@@ -38,8 +38,8 @@ namespace D3DCompileInjector
                                          [MarshalAs(UnmanagedType.Interface), Out, Optional] out ID3DBlob ppErrorMsgs);
 
         [DllImport("d3dcompiler_47.dll", EntryPoint = "D3DCompileFromFile", CallingConvention = CallingConvention.StdCall,
-            PreserveSig = true, SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern int D3DCompileFromFile([MarshalAs(UnmanagedType.LPWStr), In] String pFileName,
+            PreserveSig = true, SetLastError = true, CharSet = CharSet.Ansi)]
+        public static extern HRESULT D3DCompileFromFile([MarshalAs(UnmanagedType.LPWStr), In] String pFileName,
                                                     [In, Optional] D3D_SHADER_MACRO[] pDefines,
                                                     [In, Optional] IntPtr pInclude,
                                                     [MarshalAs(UnmanagedType.LPStr), In] String pEntrypoint,
@@ -49,15 +49,15 @@ namespace D3DCompileInjector
                                                     [MarshalAs(UnmanagedType.Interface), Out] out ID3DBlob ppCode,
                                                     [MarshalAs(UnmanagedType.Interface), Out, Optional] out ID3DBlob ppErrorMsgs);
 
-        static int D3DCompileFromFile_Hooked(String pFileName,
-                                             D3D_SHADER_MACRO[] pDefines,
-                                             IntPtr pInclude,
-                                             String pEntrypoint,
-                                             String pTarget,
-                                             uint Flags1,
-                                             uint Flags2,
-                                             out ID3DBlob ppCode,
-                                             out ID3DBlob ppErrorMsgs)
+        static HRESULT D3DCompileFromFile_Hooked(String pFileName,
+                                                 D3D_SHADER_MACRO[] pDefines,
+                                                 IntPtr pInclude,
+                                                 String pEntrypoint,
+                                                 String pTarget,
+                                                 uint Flags1,
+                                                 uint Flags2,
+                                                 out ID3DBlob ppCode,
+                                                 out ID3DBlob ppErrorMsgs)
         {
             try
             {
@@ -142,6 +142,18 @@ namespace D3DCompileInjector
                               out ppCode,
                               out ppErrorMsgs);
         }
+
+        public static string ID3DBlobToString(ID3DBlob blob)
+        {
+            if (blob == null)
+            {
+                return string.Empty;
+            }
+
+            string str = Marshal.PtrToStringAnsi(blob.GetBufferPointer(), (int) blob.GetBufferSize());
+            return str;
+        }
+
 
 
     }
