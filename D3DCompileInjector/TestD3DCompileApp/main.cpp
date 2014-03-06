@@ -81,6 +81,9 @@ int main()
     vsBlob->Release();
     psBlob->Release();
 
+    cout << "Program about to end...." << endl;
+    cin.get();
+
     return 0;
 }
 

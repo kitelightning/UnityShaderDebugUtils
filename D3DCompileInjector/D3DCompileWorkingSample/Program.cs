@@ -144,6 +144,18 @@ namespace SimpleTriangle
             {
                 throw new ApplicationException("PInvoke to D3DCompile failed");
             }
+
+            Console.WriteLine("Code size " + codeSize);
+
+            hr = D3DCompileInjector.Main.D3DCompileFromFile("triangle.fx", null, IntPtr.Zero, "vs_main", "vs_5_0", 0, 0, out pCode, out pMsg);
+            lastError = Marshal.GetLastWin32Error();
+            codePtr = pCode.GetBufferPointer();
+            codeSize = pCode.GetBufferSize();
+
+            if (lastError != 0 || hr < 0)
+            {
+                throw new ApplicationException("PInvoke to D3DCompile failed");
+            }
             
             Console.WriteLine("Code size " + codeSize);
         }

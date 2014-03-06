@@ -42,8 +42,8 @@ namespace D3DCompileInjector
                 try
                 {
                     Config.Register("D3DCompile Debug Flag Injector", 
-                                    "D3DCompileInjectedDll.dll", 
-                                    "D3DCompileInjectorHost.exe");
+                                    "D3DCompileInjectorHost.exe",
+                                    "D3DCompileInjectedDll.dll");
                 }
                 catch (ApplicationException)
                 {
@@ -60,8 +60,8 @@ namespace D3DCompileInjector
                 RemoteHooking.IpcCreateServer<D3DCompileInterface>(ref ChannelName, WellKnownObjectMode.SingleCall);
 
                 RemoteHooking.Inject(
-                    unityPid, 
-                    InjectionOptions.Default, 
+                    unityPid,
+                    InjectionOptions.DoNotRequireStrongName,
                     "D3DCompileInjectedDll.dll", 
                     "D3DCompileInjectedDll.dll", 
                     ChannelName);

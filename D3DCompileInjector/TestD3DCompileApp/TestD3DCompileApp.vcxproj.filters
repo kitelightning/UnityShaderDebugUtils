@@ -21,9 +21,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\D3DCompiler\x86\D3DCompiler_47.dll" />
+    <None Include="BasicHLSL11_PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="BasicHLSL11_PS.hlsl" />
-    <FxCompile Include="BasicHLSL11_VS.hlsl" />
+    <Media Include="BasicHLSL11_VS.hlsl" />
   </ItemGroup>
 </Project>
