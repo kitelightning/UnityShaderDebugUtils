@@ -141,7 +141,20 @@ namespace SimpleTriangle
 
             IntPtr globalShader = Marshal.StringToHGlobalAnsi(shader);
             int lastError = Marshal.GetLastWin32Error();
-            HRESULT hr = D3DCompileInjector.Main.D3DCompile(globalShader, (uint)shader.Length, null, null, IntPtr.Zero, "vs_main", "vs_5_0", 0, 0, out pCode, out pMsg);
+            HRESULT hr = D3DCompileInjector.Main.D3DCompile(globalShader, 
+                                                            (uint)shader.Length, 
+                                                            null,
+                                                            new D3DCompileInjector.Main.D3D_SHADER_MACRO[2] { 
+                                                                new D3DCompileInjector.Main.D3D_SHADER_MACRO { Name = "EXAMPLE_DEFINE", Definition = "1" },
+                                                                new D3DCompileInjector.Main.D3D_SHADER_MACRO { Name = null, Definition = null }
+                                                            }, 
+                                                            IntPtr.Zero, 
+                                                            "vs_main", 
+                                                            "vs_5_0", 
+                                                            0, 
+                                                            0, 
+                                                            out pCode, 
+                                                            out pMsg);
             lastError = Marshal.GetLastWin32Error();
 
             if (hr.Failed)
@@ -157,7 +170,10 @@ namespace SimpleTriangle
 
             hr = D3DCompileInjector.Main.D3DCompileFromFile(
                 @".\triangle.fx", 
-                null,
+                new D3DCompileInjector.Main.D3D_SHADER_MACRO[2] { 
+                    new D3DCompileInjector.Main.D3D_SHADER_MACRO { Name = "EXAMPLE_DEFINE", Definition = "1" },
+                    new D3DCompileInjector.Main.D3D_SHADER_MACRO { Name = null, Definition = null }
+                },
                 IntPtr.Zero,
                 "VShader", 
                 "vs_5_0", 

@@ -21,6 +21,7 @@ HRESULT CompileShader( _In_ LPCWSTR srcFile, _In_ LPCSTR entryPoint, _In_ LPCSTR
     const D3D_SHADER_MACRO defines[] = 
     {
         "EXAMPLE_DEFINE", "1",
+        "EXAMPLE_TWO_DEFINE", "2",
         NULL, NULL
     };
 
@@ -58,7 +59,7 @@ int main()
 
     // Compile vertex shader shader
     ID3DBlob *vsBlob = nullptr;
-    HRESULT hr = CompileShader( L"BasicHLSL11_VS.hlsl", "VSMain", "vs_4_0_level_9_1", &vsBlob );
+    HRESULT hr = CompileShader( L"BasicHLSL11_VS.hlsl", "VSMain", "vs_5_0", &vsBlob );
     if ( FAILED(hr) )
     {
         printf("Failed compiling vertex shader %08X\n", hr );

@@ -52,6 +52,9 @@ namespace D3DCompileInjector
             {
                 while (true)
                 {
+                    Thread.Sleep(500);
+
+                    Interface.Ping();
                 }
             }
             catch

@@ -47,7 +47,7 @@ namespace D3DCompileInjector
                 }
                 catch (ApplicationException)
                 {
-                    MessageBox.Show("This is an administrative task!", "Permission denied...", MessageBoxButtons.OK);
+                    MessageBox.Show("Must run as admin!", "Permission denied...", MessageBoxButtons.OK);
 
                     System.Diagnostics.Process.GetCurrentProcess().Kill();
                 }
