@@ -14,6 +14,7 @@
     <ProjectGuid>{05DE3100-53DC-462F-9EDF-B7DBADB55810}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>TestD3DCompileApp</RootNamespace>
+    <ProjectName>TestD3DCompileUnmanaged</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -16,6 +16,9 @@ namespace SimpleTriangle
     {
         static void Main()
         {
+            //Ghetto way of loading D3DCompiler_*.dll into process by calling PInvoke
+            TestShaderCompilationPInvoke();
+            MessageBox.Show("Attach Injector");
             TestShaderCompilationPInvoke();
 
             TestManagedDXDevice();
@@ -167,6 +170,50 @@ namespace SimpleTriangle
             ulong codeSize = pCode.GetBufferSize();
 
             Console.WriteLine("Code size " + codeSize);
+
+
+
+
+
+
+
+
+            hr = D3DCompileInjector.Main.D3DCompile2(globalShader,
+                                                            (uint)shader.Length,
+                                                            null,
+                                                            new D3DCompileInjector.Main.D3D_SHADER_MACRO[2] { 
+                                                                new D3DCompileInjector.Main.D3D_SHADER_MACRO { Name = "EXAMPLE_DEFINE", Definition = "1" },
+                                                                new D3DCompileInjector.Main.D3D_SHADER_MACRO { Name = null, Definition = null }
+                                                            },
+                                                            IntPtr.Zero,
+                                                            "vs_main",
+                                                            "vs_5_0",
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            IntPtr.Zero,
+                                                            0,
+                                                            out pCode,
+                                                            out pMsg);
+            lastError = Marshal.GetLastWin32Error();
+
+            if (hr.Failed)
+            {
+                string error = string.Format("{0} : {1}", hr.ToString(), D3DCompileInjector.Main.ID3DBlobToString(pMsg));
+                throw new Exception(error);
+            }
+
+            codePtr = pCode.GetBufferPointer();
+            codeSize = pCode.GetBufferSize();
+
+            Console.WriteLine("Code size " + codeSize);
+
+
+
+
+
+
+
 
             hr = D3DCompileInjector.Main.D3DCompileFromFile(
                 @".\triangle.fx", 

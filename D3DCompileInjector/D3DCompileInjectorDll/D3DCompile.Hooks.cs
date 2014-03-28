@@ -28,7 +28,7 @@ namespace D3DCompileInjector
         }
 
         #region D3DCompileFromFile
-        [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true, CharSet = CharSet.Unicode)]
         delegate HRESULT DD3DCompileFromFile([MarshalAs(UnmanagedType.LPWStr), In] String pFileName,
                                              [In, Optional, MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(D3D_SHADER_MACROMarshaler))]
                                              D3D_SHADER_MACRO[] pDefines,
@@ -41,7 +41,7 @@ namespace D3DCompileInjector
                                              [MarshalAs(UnmanagedType.Interface), Out, Optional] out ID3DBlob ppErrorMsgs);
 
         [DllImport("d3dcompiler_47.dll", EntryPoint = "D3DCompileFromFile", CallingConvention = CallingConvention.StdCall,
-            PreserveSig = true, SetLastError = true, CharSet = CharSet.Ansi)]
+            PreserveSig = true, SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern HRESULT D3DCompileFromFile([MarshalAs(UnmanagedType.LPWStr), In] String pFileName,
                                                         [In, Optional, MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(D3D_SHADER_MACROMarshaler))]
                                                         D3D_SHADER_MACRO[] pDefines,
@@ -86,7 +86,7 @@ namespace D3DCompileInjector
         #endregion 
 
         #region D3DCompile
-        [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true)]
+        [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true, CharSet = CharSet.Unicode)]
         delegate int DD3DCompile([In] IntPtr pSrcData,
                                  [In] uint srcDataSize,
                                  [MarshalAs(UnmanagedType.LPStr), In, Optional] String pSourceName,
@@ -101,7 +101,7 @@ namespace D3DCompileInjector
                                  [MarshalAs(UnmanagedType.Interface), Out, Optional] out ID3DBlob ppErrorMsgs);
 
         [DllImport("d3dcompiler_47.dll", EntryPoint = "D3DCompile", CallingConvention = CallingConvention.StdCall,
-            PreserveSig = true, SetLastError = true)]
+            PreserveSig = true, SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern int D3DCompile([In] IntPtr pSrcData,
                                             [In] uint srcDataSize,
                                             [MarshalAs(UnmanagedType.LPStr), In, Optional] String pSourceName,
@@ -148,6 +148,84 @@ namespace D3DCompileInjector
                               flags2,
                               out ppCode,
                               out ppErrorMsgs);
+        }
+        #endregion
+
+        #region D3DCompile2
+        [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true, CharSet = CharSet.Unicode)]
+        delegate int DD3DCompile2([In] IntPtr pSrcData,
+                                  [In] uint srcDataSize,
+                                  [MarshalAs(UnmanagedType.LPStr), In, Optional] String pSourceName,
+                                  [In, Optional, MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(D3D_SHADER_MACROMarshaler))]
+                                  D3D_SHADER_MACRO[] pDefines,
+                                  [In, Optional] IntPtr pInclude,
+                                  [MarshalAs(UnmanagedType.LPStr), In] String pEntryPoint,
+                                  [MarshalAs(UnmanagedType.LPStr), In] String pTarget,
+                                  [In] uint flags1,
+                                  [In] uint flags2,
+                                  [In] uint SecondaryDataFlags,
+                                  [In] IntPtr pSecondaryData,
+                                  [In] uint SecondaryDataSize,
+                                  [MarshalAs(UnmanagedType.Interface), Out] out ID3DBlob ppCode,
+                                  [MarshalAs(UnmanagedType.Interface), Out, Optional] out ID3DBlob ppErrorMsgs);                                  
+
+        [DllImport("d3dcompiler_47.dll", EntryPoint = "D3DCompile2", CallingConvention = CallingConvention.StdCall,
+            PreserveSig = true, SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern int D3DCompile2([In] IntPtr pSrcData,
+                                             [In] uint srcDataSize,
+                                             [MarshalAs(UnmanagedType.LPStr), In, Optional] String pSourceName,
+                                             [In, Optional, MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(D3D_SHADER_MACROMarshaler))]
+                                             D3D_SHADER_MACRO[] pDefines,
+                                             [In, Optional] IntPtr pInclude,
+                                             [MarshalAs(UnmanagedType.LPStr), In] String pEntryPoint,
+                                             [MarshalAs(UnmanagedType.LPStr), In] String pTarget,
+                                             [In] uint flags1,
+                                             [In] uint flags2,
+                                             [In] uint SecondaryDataFlags,
+                                             [In] IntPtr pSecondaryData,
+                                             [In] uint SecondaryDataSize,
+                                             [MarshalAs(UnmanagedType.Interface), Out] out ID3DBlob ppCode,
+                                             [MarshalAs(UnmanagedType.Interface), Out, Optional] out ID3DBlob ppErrorMsgs);
+
+        static int D3DCompile2_Hooked(IntPtr pSrcData,
+                                      uint srcDataSize,
+                                      String pSourceName,
+                                      D3D_SHADER_MACRO[] pDefines,
+                                      IntPtr pInclude,
+                                      String pEntryPoint,
+                                      String pTarget,
+                                      uint flags1,
+                                      uint flags2,
+                                      uint SecondaryDataFlags,
+                                      IntPtr pSecondaryData,
+                                      uint SecondaryDataSize,
+                                      out ID3DBlob ppCode,
+                                      out ID3DBlob ppErrorMsgs)
+        {
+            try
+            {
+                Main This = (Main)HookRuntimeInfo.Callback;
+                This.Interface.WriteConsole("D3DCompile2_Hooked");
+            }
+            catch
+            {
+            }
+
+            // call original API...
+            return D3DCompile2(pSrcData,
+                               srcDataSize,
+                               pSourceName,
+                               pDefines,
+                               pInclude,
+                               pEntryPoint,
+                               pTarget,
+                               flags1,
+                               flags2,
+                               SecondaryDataFlags,
+                               pSecondaryData,
+                               SecondaryDataSize,
+                               out ppCode,
+                               out ppErrorMsgs);
         }
         #endregion
 

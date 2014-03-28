@@ -8,7 +8,8 @@ namespace D3DCompileInjector
     public partial class Main : EasyHook.IEntryPoint
     {
         D3DCompileInterface Interface;
-        //LocalHook D3DCompileHook;
+        LocalHook D3DCompileHook;
+        LocalHook D3DCompile2Hook;
         LocalHook D3DCompileFromFileHook;
 
         public Main(RemoteHooking.IContext InContext, String InChannelName)
@@ -22,12 +23,19 @@ namespace D3DCompileInjector
             // install hook...
             try
             {
-                //D3DCompileHook = LocalHook.Create(
-                //    LocalHook.GetProcAddress("D3Dcompiler_47.dll", "D3DCompile"),
-                //    new DD3DCompile(D3DCompile_Hooked),
-                //    this);
+                D3DCompileHook = LocalHook.Create(
+                    LocalHook.GetProcAddress("D3Dcompiler_47.dll", "D3DCompile"),
+                    new DD3DCompile(D3DCompile_Hooked),
+                    this);
 
-                //D3DCompileHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                D3DCompileHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+
+                D3DCompile2Hook = LocalHook.Create(
+                    LocalHook.GetProcAddress("D3Dcompiler_47.dll", "D3DCompile2"),
+                    new DD3DCompile2(D3DCompile2_Hooked),
+                    this);
+
+                D3DCompile2Hook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
 
                 D3DCompileFromFileHook = LocalHook.Create(
                     LocalHook.GetProcAddress("D3Dcompiler_47.dll", "D3DCompileFromFile"),
@@ -44,6 +52,7 @@ namespace D3DCompileInjector
             }
 
             Interface.IsInstalled(RemoteHooking.GetCurrentProcessId());
+            System.Diagnostics.Debug.Break();
 
             RemoteHooking.WakeUpProcess();
 

@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D3DCompileInjectorHost", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D3DCompileInjectedDll", "D3DCompileInjectorDll\D3DCompileInjectedDll.csproj", "{9046875D-EFAE-49CD-BD05-6DA36A84214B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D3DCompileWorkingSample", "D3DCompileWorkingSample\D3DCompileWorkingSample.csproj", "{CBF5EC43-0A46-4D24-B25B-16E409234503}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestD3DPInvoke", "D3DCompileWorkingSample\TestD3DPInvoke.csproj", "{CBF5EC43-0A46-4D24-B25B-16E409234503}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestD3DCompileApp", "TestD3DCompileApp\TestD3DCompileApp.vcxproj", "{05DE3100-53DC-462F-9EDF-B7DBADB55810}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestD3DCompileUnmanaged", "TestD3DCompileApp\TestD3DCompileApp.vcxproj", "{05DE3100-53DC-462F-9EDF-B7DBADB55810}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
